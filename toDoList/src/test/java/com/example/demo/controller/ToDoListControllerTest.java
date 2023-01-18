@@ -161,5 +161,31 @@ class ToDoListControllerTest {
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
 	}
+	
+	@Test
+    public void deleteTask() throws Exception{
+		
+		String expResponse = "{\"status\":\"200\",\"success\":true,\"reason\":null,\"allTaskList\":null,\"task\":null}";
+		
+		TaskModel mockData= new TaskModel();
+		mockData.setId(1l);
+		List<TaskModel>dataList = Arrays.asList(mockData);
+		TaskResponse res =new TaskResponse();
+		res.setStatus("200");
+		res.setSuccess(true);
+		
+		Mockito.when(service.deleteTask(mockData.getId()))
+				.thenReturn(res);
+		
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete(
+				"/task?id=1").accept(
+				MediaType.APPLICATION_JSON);
+		
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+				
+		JSONAssert.assertEquals(expResponse, result.getResponse()
+				.getContentAsString(), false);
+    }
 
 }
